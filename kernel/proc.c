@@ -149,6 +149,7 @@ freeproc(struct proc *p)
   p->chan = 0;
   p->killed = 0;
   p->xstate = 0;
+  p->trace_mask = 0;
   p->state = UNUSED;
 }
 
@@ -290,6 +291,7 @@ fork(void)
   np->cwd = idup(p->cwd);
 
   safestrcpy(np->name, p->name, sizeof(p->name));
+  np->trace_mask = p->trace_mask; // mask传递到子进程
 
   pid = np->pid;
 
@@ -692,4 +694,15 @@ procdump(void)
     printf("%d %s %s", p->pid, state, p->name);
     printf("\n");
   }
+}
+
+int free_proc_size()
+{
+  int count = 0;
+  for (int i = 0; i < NPROC; i++)
+  {
+    if (proc[i].state == UNUSED)
+      count++;
+  }
+  return count;
 }
