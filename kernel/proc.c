@@ -698,11 +698,22 @@ procdump(void)
 
 int free_proc_size()
 {
-  int count = 0;
-  for (int i = 0; i < NPROC; i++)
+  struct proc *p;
+  // counting the number of processes
+  uint64 num = 0;
+  // traverse all processes
+  for (p = proc; p < &proc[NPROC]; p++)
   {
-    if (proc[i].state == UNUSED)
-      count++;
+    // add lock
+    acquire(&p->lock);
+    // if the processes's state is not UNUSED
+    if (p->state != UNUSED)
+    {
+      // the num add one
+      num++;
+    }
+    // release lock
+    release(&p->lock);
   }
-  return count;
+  return num;
 }
