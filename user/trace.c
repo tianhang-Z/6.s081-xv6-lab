@@ -15,6 +15,7 @@ main(int argc, char *argv[])
   }
 
   // trace的mask需要大于0
+  // 调用trace
   if (trace(atoi(argv[1])) < 0) {
     fprintf(2, "%s: trace failed\n", argv[0]);
     exit(1);
